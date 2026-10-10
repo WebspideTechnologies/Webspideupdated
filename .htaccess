@@ -2,8 +2,30 @@
 RewriteEngine On
 RewriteBase /
 
-# Rewrite /blog/<slug>/ to blog-detail.html if static folder doesn't exist
+# 1. Strip index.html / index from URL (redirect to root /)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index(\.html)?\ HTTP/ [NC]
+RewriteRule ^index(\.html)?$ / [R=301,L]
+
+# 2. Redirect /blog.html directly to /blog/
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /blog\.html\ HTTP/ [NC]
+RewriteRule ^blog\.html$ /blog/ [R=301,L]
+
+# 3. Strip .html extension from direct requests (e.g. /aboutus.html -> /aboutus)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^\ ]+)\.html\ HTTP/ [NC]
+RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+
+# 4. Route /blog/<slug>/ or /blog/<slug> to blog-detail.html?title=$1 if static folder doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^blog/([^/]+)/?$ blog-detail.html?title=$1 [L,QSA]
+
+# 5. Internally rewrite extensionless requests to .html if the .html file exists
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.+)$ $1.html [L,QSA]
+
+# 6. Fallback for /blog to /blog/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^blog/?$ blog/ [L]
 </IfModule>

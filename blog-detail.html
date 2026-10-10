@@ -1,6 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* Universal Clean URL handler: removes .html and index.html from address bar without reloading */
+(function(){
+  if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+    var p = window.location.pathname;
+    var s = window.location.search || '';
+    var h = window.location.hash || '';
+    if (p.endsWith('/index.html') || p.endsWith('/index')) {
+      var c = p.replace(/\/index(\.html)?$/, '/');
+      window.history.replaceState(null, '', c + s + h);
+    } else if (p.endsWith('/blog.html')) {
+      var c = p.replace(/\/blog\.html$/, '/blog/');
+      window.history.replaceState(null, '', c + s + h);
+    } else if (p.endsWith('.html')) {
+      var c = p.replace(/\.html$/, '');
+      window.history.replaceState(null, '', c + s + h);
+    }
+  }
+  if (typeof window !== 'undefined' && window.location && window.location.protocol === 'file:') {
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest && e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.includes('.html')) return;
+      if (href === '' || href === '/' || href === './') {
+        a.setAttribute('href', 'index.html');
+      } else if (href === 'blog' || href === 'blog/' || href === './blog/' || href === './blog') {
+        a.setAttribute('href', 'blog.html');
+      } else if (!href.includes('.')) {
+        a.setAttribute('href', href.replace(/\/$/, '') + '.html');
+      }
+    }, true);
+  }
+})();
+</script>
 <meta charset="UTF-8" />
 <title id="pageTitle">Blog Article | Webspide Technologies</title>
 <meta name="description" id="metaDesc" content="Read expert tech articles, software engineering insights, and digital strategies from Webspide Technologies." />
@@ -9,7 +44,7 @@
 <meta name="publisher" content="Webspide Technologies" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<link rel="canonical" id="canonicalLink" href="https://azhar2006-collab.github.io/Webspideupdated/blog-detail.html" />
+<link rel="canonical" id="canonicalLink" href="https://azhar2006-collab.github.io/Webspideupdated/blog/" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="article" />
@@ -17,7 +52,7 @@
 <meta id="ogTitle" property="og:title" content="Webspide Blog" />
 <meta id="ogDesc" property="og:description" content="Explore tech insights and software development strategies from Webspide Technologies." />
 <meta id="ogImage" property="og:image" content="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" />
-<meta id="ogUrl" property="og:url" content="https://azhar2006-collab.github.io/Webspideupdated/blog-detail.html" />
+<meta id="ogUrl" property="og:url" content="https://azhar2006-collab.github.io/Webspideupdated/blog/" />
 
 <!-- Twitter Cards -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -1336,7 +1371,7 @@ h5{font-weight:800!important;color:#8B5CF6!important}
 <!-- HEADER -->
 <header class="site-header">
   <div class="nav-bar">
-    <a href="index.html" class="logo-wrap">
+    <a href="./" class="logo-wrap">
       <div class="logo-text-block">
         <span class="logo-name"><img src="w-logo.png" alt="W" class="w-logo">EBSPIDE</span>
         <span class="logo-sub">Technology</span>
@@ -1344,8 +1379,8 @@ h5{font-weight:800!important;color:#8B5CF6!important}
     </a>
 
     <ul class="nav-links-new">
-      <li><a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a></li>
-      <li><a href="aboutus.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>About Us</a></li>
+      <li><a href="./"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a></li>
+      <li><a href="aboutus"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>About Us</a></li>
       <li class="nav-item-services" id="navServices">
         <button>
           <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
@@ -1355,46 +1390,46 @@ h5{font-weight:800!important;color:#8B5CF6!important}
         <div class="mega-dropdown" id="megaDropdown">
           <div class="mega-inner">
             <div class="mega-col">
-              <a href="indexweb.html" class="mega-col-header" style="text-decoration:none;cursor:pointer;">
+              <a href="indexweb" class="mega-col-header" style="text-decoration:none;cursor:pointer;">
                 <div class="mega-col-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
                 <div class="mega-col-title">Web Development</div>
               </a>
               <div class="mega-links">
-                <a href="indexcustom.html" class="mega-link">Custom Web Development</a>
-                <a href="indexword1.html" class="mega-link">WordPress Development</a>
-                <a href="indexfront1.html" class="mega-link">Front-End Development</a>
-                <a href="index1.html" class="mega-link">Back-End Development</a>
-                <a href="indexecom1.html" class="mega-link">E-Commerce Web Development</a>
-                <a href="indexweb1.html" class="mega-link">Web Application Development</a>
-                <a href="indexuiux1.html" class="mega-link">UI/UX Design</a>
+                <a href="indexcustom" class="mega-link">Custom Web Development</a>
+                <a href="indexword1" class="mega-link">WordPress Development</a>
+                <a href="indexfront1" class="mega-link">Front-End Development</a>
+                <a href="index1" class="mega-link">Back-End Development</a>
+                <a href="indexecom1" class="mega-link">E-Commerce Web Development</a>
+                <a href="indexweb1" class="mega-link">Web Application Development</a>
+                <a href="indexuiux1" class="mega-link">UI/UX Design</a>
               </div>
             </div>
             <div class="mega-col mega-col-app">
-              <a href="indexapp.html" class="mega-col-header" style="text-decoration:none;cursor:pointer;">
+              <a href="indexapp" class="mega-col-header" style="text-decoration:none;cursor:pointer;">
                 <div class="mega-col-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
                 <div class="mega-col-title">App Development</div>
               </a>
               <div class="mega-links">
-                <a href="indexandroid1.html" class="mega-link">Android App Development</a>
-                <a href="indexflutter1.html" class="mega-link">Flutter App Development</a>
-                <a href="indexios1.html" class="mega-link">iOS App Development</a>
-                <a href="indexreact1.html" class="mega-link">React Native App Development</a>
+                <a href="indexandroid1" class="mega-link">Android App Development</a>
+                <a href="indexflutter1" class="mega-link">Flutter App Development</a>
+                <a href="indexios1" class="mega-link">iOS App Development</a>
+                <a href="indexreact1" class="mega-link">React Native App Development</a>
               </div>
             </div>
             <div class="mega-col">
-              <a href="indexdigi.html" class="mega-col-header" style="text-decoration:none;cursor:pointer;">
+              <a href="indexdigi" class="mega-col-header" style="text-decoration:none;cursor:pointer;">
                 <div class="mega-col-icon"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg></div>
                 <div class="mega-col-title">Digital Marketing Services</div>
               </a>
               <div class="mega-links" style="display:grid;grid-template-columns:1fr 1fr;gap:0 4px;">
-                <a href="indexseo1.html" class="mega-link">Search Engine Optimization (SEO)</a>
-                <a href="indexsem1.html" class="mega-link">Search Engine Marketing (SEM)</a>
-                <a href="indexsmmarket1.html" class="mega-link">Social Media Marketing</a>
-                <a href="indexmanage1.html" class="mega-link">Social Media Management</a>
-                <a href="indexseocontent1.html" class="mega-link">SEO Content Writing</a>
-                <a href="indexemail1.html" class="mega-link">Email Marketing</a>
-                <a href="indexinfluence1.html" class="mega-link">Influencer Marketing</a>
-                <a href="indexapp1.html" class="mega-link">App Store Optimization (ASO)</a>
+                <a href="indexseo1" class="mega-link">Search Engine Optimization (SEO)</a>
+                <a href="indexsem1" class="mega-link">Search Engine Marketing (SEM)</a>
+                <a href="indexsmmarket1" class="mega-link">Social Media Marketing</a>
+                <a href="indexmanage1" class="mega-link">Social Media Management</a>
+                <a href="indexseocontent1" class="mega-link">SEO Content Writing</a>
+                <a href="indexemail1" class="mega-link">Email Marketing</a>
+                <a href="indexinfluence1" class="mega-link">Influencer Marketing</a>
+                <a href="indexapp1" class="mega-link">App Store Optimization (ASO)</a>
               </div>
             </div>
           </div>
@@ -1413,11 +1448,11 @@ h5{font-weight:800!important;color:#8B5CF6!important}
           <a href="#">E-Commerce Suite</a>
         </div>
       </li>
-      <li><a href="blog.html" class="active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog</a></li>
-      <li><a href="index.html#contact"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Contact Us</a></li>
+      <li><a href="blog/" class="active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog</a></li>
+      <li><a href="./#contact"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Contact Us</a></li>
     </ul>
 
-    <a href="index.html#contact" class="nav-cta-new">
+    <a href="./#contact" class="nav-cta-new">
       Get a Quote
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
@@ -1428,36 +1463,36 @@ h5{font-weight:800!important;color:#8B5CF6!important}
 <!-- Mobile Menu -->
 <nav class="mobile-menu" id="mobileMenu">
   <div class="mobile-menu-inner">
-    <a href="index.html" class="mob-link"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
-    <a href="aboutus.html" class="mob-link"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>About Us</a>
-    <a href="blog.html" class="mob-link active-mob"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog</a>
-    <a href="indexweb.html" class="mob-section-title" style="text-decoration:none;display:block;cursor:pointer;">Web Development</a>
-    <a href="indexcustom.html" class="mob-sub-link">Custom Web Development</a>
-    <a href="indexword1.html" class="mob-sub-link">WordPress Development</a>
-    <a href="indexfront1.html" class="mob-sub-link">Front-End Development</a>
-    <a href="index1.html" class="mob-sub-link">Back-End Development</a>
-    <a href="indexecom1.html" class="mob-sub-link">E-Commerce Web Development</a>
-    <a href="indexweb1.html" class="mob-sub-link">Web Application Development</a>
-    <a href="indexuiux1.html" class="mob-sub-link">UI/UX Design</a>
-    <a href="indexapp.html" class="mob-section-title" style="text-decoration:none;display:block;cursor:pointer;">App Development</a>
-    <a href="indexandroid1.html" class="mob-sub-link">Android App Development</a>
-    <a href="indexflutter1.html" class="mob-sub-link">Flutter App Development</a>
-    <a href="indexios1.html" class="mob-sub-link">iOS App Development</a>
-    <a href="indexreact1.html" class="mob-sub-link">React Native App Development</a>
-    <a href="indexdigi.html" class="mob-section-title" style="text-decoration:none;display:block;cursor:pointer;">Digital Marketing Services</a>
-    <a href="indexseo1.html" class="mob-sub-link">Search Engine Optimization (SEO)</a>
-    <a href="indexsem1.html" class="mob-sub-link">Search Engine Marketing (SEM)</a>
-    <a href="indexsmmarket1.html" class="mob-sub-link">Social Media Marketing</a>
-    <a href="indexmanage1.html" class="mob-sub-link">Social Media Management</a>
-    <a href="indexseocontent1.html" class="mob-sub-link">SEO Content Writing</a>
-    <a href="indexemail1.html" class="mob-sub-link">Email Marketing</a>
-    <a href="indexinfluence1.html" class="mob-sub-link">Influencer Marketing</a>
-    <a href="indexapp1.html" class="mob-sub-link">App Store Optimization (ASO)</a>
+    <a href="./" class="mob-link"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
+    <a href="aboutus" class="mob-link"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>About Us</a>
+    <a href="blog/" class="mob-link active-mob"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog</a>
+    <a href="indexweb" class="mob-section-title" style="text-decoration:none;display:block;cursor:pointer;">Web Development</a>
+    <a href="indexcustom" class="mob-sub-link">Custom Web Development</a>
+    <a href="indexword1" class="mob-sub-link">WordPress Development</a>
+    <a href="indexfront1" class="mob-sub-link">Front-End Development</a>
+    <a href="index1" class="mob-sub-link">Back-End Development</a>
+    <a href="indexecom1" class="mob-sub-link">E-Commerce Web Development</a>
+    <a href="indexweb1" class="mob-sub-link">Web Application Development</a>
+    <a href="indexuiux1" class="mob-sub-link">UI/UX Design</a>
+    <a href="indexapp" class="mob-section-title" style="text-decoration:none;display:block;cursor:pointer;">App Development</a>
+    <a href="indexandroid1" class="mob-sub-link">Android App Development</a>
+    <a href="indexflutter1" class="mob-sub-link">Flutter App Development</a>
+    <a href="indexios1" class="mob-sub-link">iOS App Development</a>
+    <a href="indexreact1" class="mob-sub-link">React Native App Development</a>
+    <a href="indexdigi" class="mob-section-title" style="text-decoration:none;display:block;cursor:pointer;">Digital Marketing Services</a>
+    <a href="indexseo1" class="mob-sub-link">Search Engine Optimization (SEO)</a>
+    <a href="indexsem1" class="mob-sub-link">Search Engine Marketing (SEM)</a>
+    <a href="indexsmmarket1" class="mob-sub-link">Social Media Marketing</a>
+    <a href="indexmanage1" class="mob-sub-link">Social Media Management</a>
+    <a href="indexseocontent1" class="mob-sub-link">SEO Content Writing</a>
+    <a href="indexemail1" class="mob-sub-link">Email Marketing</a>
+    <a href="indexinfluence1" class="mob-sub-link">Influencer Marketing</a>
+    <a href="indexapp1" class="mob-sub-link">App Store Optimization (ASO)</a>
     <div class="mob-section-title">Products</div>
     <a href="#" class="mob-sub-link">CMS Platform</a>
     <a href="#" class="mob-sub-link">Analytics Dashboard</a>
     <a href="#" class="mob-sub-link">SEO Toolkit</a>
-    <a href="index.html#contact" class="mob-cta" id="mobCta">Get a Free Quote &rarr;</a>
+    <a href="./#contact" class="mob-cta" id="mobCta">Get a Free Quote &rarr;</a>
   </div>
 </nav>
 
@@ -1467,15 +1502,15 @@ h5{font-weight:800!important;color:#8B5CF6!important}
 
     <!-- Centered Header Section (Matches centered article column) -->
     <header class="blog-article-header">
-      <a href="blog.html" class="back-to-blogs-btn" onclick="handleBackToBlogs(event)">
+      <a href="blog/" class="back-to-blogs-btn" onclick="handleBackToBlogs(event)">
         ← Back to All Articles
       </a>
 
       <!-- Breadcrumbs -->
       <nav class="blog-breadcrumbs" id="detailBreadcrumbs">
-        <a href="index.html" id="breadcrumbHomeLink" onclick="handleGoHome(event)">Home</a>
+        <a href="./" id="breadcrumbHomeLink" onclick="handleGoHome(event)">Home</a>
         <span class="sep">›</span>
-        <a href="blog.html" id="breadcrumbBlogLink" onclick="handleBackToBlogs(event)">Blog</a>
+        <a href="blog/" id="breadcrumbBlogLink" onclick="handleBackToBlogs(event)">Blog</a>
         <span class="sep">›</span>
         <span id="breadcrumbCategory" style="color:#8B5CF6;">Category</span>
         <span class="sep">›</span>
@@ -1627,46 +1662,46 @@ h5{font-weight:800!important;color:#8B5CF6!important}
       <div class="footer-col">
         <h4>Digital Marketing</h4>
         <div class="footer-links">
-          <a href="indexseo1.html">Search Engine Optimization</a>
-          <a href="indexsem1.html">Search Engine Marketing</a>
-          <a href="indexsmmarket1.html">Social Media Marketing</a>
-          <a href="indexmanage1.html">Social Media Management</a>
-          <a href="indexseocontent1.html">SEO Content Writing</a>
-          <a href="indexemail1.html">Email Marketing</a>
-          <a href="indexinfluence1.html">Influencer Marketing</a>
-          <a href="indexapp1.html">App Store Optimization</a>
+          <a href="indexseo1">Search Engine Optimization</a>
+          <a href="indexsem1">Search Engine Marketing</a>
+          <a href="indexsmmarket1">Social Media Marketing</a>
+          <a href="indexmanage1">Social Media Management</a>
+          <a href="indexseocontent1">SEO Content Writing</a>
+          <a href="indexemail1">Email Marketing</a>
+          <a href="indexinfluence1">Influencer Marketing</a>
+          <a href="indexapp1">App Store Optimization</a>
         </div>
       </div>
 
       <div class="footer-col">
         <h4>Web &amp; Mobile Dev</h4>
         <div class="footer-links">
-          <a href="indexcustom.html">Custom Web Development</a>
-          <a href="indexword1.html">WordPress Development</a>
-          <a href="indexfront1.html">Front-End Development</a>
-          <a href="index1.html">Backend Development</a>
-          <a href="indexecom1.html">Ecommerce Development</a>
-          <a href="indexandroid1.html">Android App Development</a>
-          <a href="indexios1.html">iOS App Development</a>
-          <a href="indexflutter1.html">Flutter App Development</a>
-          <a href="indexreact1.html">React Native Development</a>
+          <a href="indexcustom">Custom Web Development</a>
+          <a href="indexword1">WordPress Development</a>
+          <a href="indexfront1">Front-End Development</a>
+          <a href="index1">Backend Development</a>
+          <a href="indexecom1">Ecommerce Development</a>
+          <a href="indexandroid1">Android App Development</a>
+          <a href="indexios1">iOS App Development</a>
+          <a href="indexflutter1">Flutter App Development</a>
+          <a href="indexreact1">React Native Development</a>
         </div>
       </div>
 
       <div class="footer-col">
         <h4>Company &amp; Legal</h4>
         <div class="footer-links">
-          <a href="aboutus.html">About Us</a>
-          <a href="blog.html">Latest Insights &amp; Blog</a>
-          <a href="index.html#whyWebspide">Why WebSpide</a>
-          <a href="index.html#industries">Industries We Serve</a>
-          <a href="index.html#contact">Contact Us</a>
-          <a href="disclaimer.html">Disclaimer</a>
-          <a href="privacy-policy.html">Privacy Policy</a>
-          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
-          <a href="refund-cancellation-policy.html">Refund &amp; Cancellation</a>
-          <a href="end-user-license-agreement.html">End User License Agreement</a>
-          <a href="service-level-agreement.html">Service Level Agreement</a>
+          <a href="aboutus">About Us</a>
+          <a href="blog/">Latest Insights &amp; Blog</a>
+          <a href="./#whyWebspide">Why WebSpide</a>
+          <a href="./#industries">Industries We Serve</a>
+          <a href="./#contact">Contact Us</a>
+          <a href="disclaimer">Disclaimer</a>
+          <a href="privacy-policy">Privacy Policy</a>
+          <a href="terms-and-conditions">Terms &amp; Conditions</a>
+          <a href="refund-cancellation-policy">Refund &amp; Cancellation</a>
+          <a href="end-user-license-agreement">End User License Agreement</a>
+          <a href="service-level-agreement">Service Level Agreement</a>
         </div>
       </div>
     </div>
@@ -1680,10 +1715,10 @@ h5{font-weight:800!important;color:#8B5CF6!important}
         DMCA Protected &amp; Verified
       </div>
       <div class="fb-nav-links">
-        <a href="privacy-policy.html">Privacy</a>
-        <a href="terms-and-conditions.html">Terms</a>
-        <a href="disclaimer.html">Disclaimer</a>
-        <a href="index.html#contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+        <a href="terms-and-conditions">Terms</a>
+        <a href="disclaimer">Disclaimer</a>
+        <a href="./#contact">Contact</a>
       </div>
     </div>
   </div>
@@ -1941,13 +1976,13 @@ function handleBackToBlogs(e) {
     e.preventDefault();
   }
   const root = getProjectRoot();
-  const target = root + 'blog.html';
+  const target = root + 'blog/';
 
   if (document.referrer) {
     try {
       const refUrl = new URL(document.referrer);
       const isSameHost = refUrl.host === window.location.host;
-      const isBlogListing = refUrl.pathname.endsWith('blog.html') || refUrl.pathname.endsWith('/blog') || refUrl.pathname.endsWith('/blog/');
+      const isBlogListing = refUrl.pathname.endsWith('blog/') || refUrl.pathname.endsWith('/blog') || refUrl.pathname.endsWith('/blog/');
       if (isSameHost && isBlogListing && window.history.length > 1) {
         window.history.back();
         return;
@@ -1963,14 +1998,14 @@ function handleGoHome(e) {
     e.preventDefault();
   }
   const root = getProjectRoot();
-  window.location.href = root + 'index.html';
+  window.location.href = root;
 }
 
 function getBlogDetailUrl(blog) {
   const root = getProjectRoot();
-  if (!blog) return root + 'blog.html';
+  if (!blog) return root + 'blog/';
   const slug = blog.slug || generateSlug(blog.title);
-  if (PHYSICAL_BLOG_SLUGS.includes(slug)) {
+  if (window.location.protocol !== 'file:' || PHYSICAL_BLOG_SLUGS.includes(slug)) {
     return `${root}blog/${encodeURIComponent(slug)}/`;
   }
   return `${root}blog-detail.html?title=${encodeURIComponent(slug)}&id=${encodeURIComponent(blog.id || '')}`;
@@ -2089,7 +2124,7 @@ function loadArticle(isFreshData) {
       <div class="detail-not-found">
         <h2>Article Not Found</h2>
         <p>The requested blog article could not be located or may have been updated. Please browse our latest insights.</p>
-        <a href="${root}blog.html" class="nav-cta-new" onclick="handleBackToBlogs(event)">← Return to All Articles</a>
+        <a href="${root}blog/" class="nav-cta-new" onclick="handleBackToBlogs(event)">← Return to All Articles</a>
       </div>
     `;
     document.title = 'Article Not Found | Webspide Technologies';
@@ -2105,7 +2140,7 @@ function renderArticle(blog) {
 
   // Update address bar to clean directory URL: /blog/<slug>/ matching user reference
   try {
-    if (window.location.protocol.startsWith('http') && PHYSICAL_BLOG_SLUGS.includes(slug)) {
+    if (window.location.protocol.startsWith('http')) {
       const cleanPath = `${root}blog/${encodeURIComponent(slug)}/`;
       const currentNorm = window.location.pathname.replace(/\/index\.html$/i, '/');
       if (currentNorm !== cleanPath && window.location.pathname !== `${root}blog/${encodeURIComponent(slug)}`) {
@@ -2116,12 +2151,12 @@ function renderArticle(blog) {
 
   // Ensure all back / home / breadcrumb links point to correct root paths
   document.querySelectorAll('.back-to-blogs-btn').forEach(btn => {
-    btn.href = root + 'blog.html';
+    btn.href = root + 'blog/';
   });
   const bBlog = document.getElementById('breadcrumbBlogLink');
-  if (bBlog) bBlog.href = root + 'blog.html';
+  if (bBlog) bBlog.href = root + 'blog/';
   const bHome = document.getElementById('breadcrumbHomeLink');
-  if (bHome) bHome.href = root + 'index.html';
+  if (bHome) bHome.href = root;
 
   // Fix header / mobile links if rendered under rewritten subpath
   document.querySelectorAll('.site-header a, .mobile-menu a, .site-footer a').forEach(a => {

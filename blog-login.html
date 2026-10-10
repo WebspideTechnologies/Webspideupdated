@@ -1,6 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* Universal Clean URL handler: removes .html and index.html from address bar without reloading */
+(function(){
+  if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+    var p = window.location.pathname;
+    var s = window.location.search || '';
+    var h = window.location.hash || '';
+    if (p.endsWith('/index.html') || p.endsWith('/index')) {
+      var c = p.replace(/\/index(\.html)?$/, '/');
+      window.history.replaceState(null, '', c + s + h);
+    } else if (p.endsWith('/blog.html')) {
+      var c = p.replace(/\/blog\.html$/, '/blog/');
+      window.history.replaceState(null, '', c + s + h);
+    } else if (p.endsWith('.html')) {
+      var c = p.replace(/\.html$/, '');
+      window.history.replaceState(null, '', c + s + h);
+    }
+  }
+  if (typeof window !== 'undefined' && window.location && window.location.protocol === 'file:') {
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest && e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.includes('.html')) return;
+      if (href === '' || href === '/' || href === './') {
+        a.setAttribute('href', 'index.html');
+      } else if (href === 'blog' || href === 'blog/' || href === './blog/' || href === './blog') {
+        a.setAttribute('href', 'blog.html');
+      } else if (!href.includes('.')) {
+        a.setAttribute('href', href.replace(/\/$/, '') + '.html');
+      }
+    }, true);
+  }
+})();
+</script>
 <meta charset="UTF-8" />
 <title>Log In ‹ Webspide — WordPress Model Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -270,7 +305,7 @@ body {
 <div class="login-container">
   <!-- Brand Logo -->
   <div class="login-logo">
-    <a href="index.html" title="Webspide Technologies">
+    <a href="./" title="Webspide Technologies">
       <div class="logo-name">
         <img src="w-logo.png" alt="W" class="w-logo" onerror="this.style.display='none'" />
         <span>EBSPIDE</span>
@@ -336,8 +371,8 @@ body {
 
   <!-- Bottom Links -->
   <div class="login-nav-links">
-    <a href="blog.html">← Go to Webspide Blog</a>
-    <a href="index.html">← Back to Main Website</a>
+    <a href="blog/">← Go to Webspide Blog</a>
+    <a href="./">← Back to Main Website</a>
   </div>
 </div>
 
@@ -425,7 +460,7 @@ function handleAdminLogin(e) {
 
     showSuccessNotice('Login successful! Redirecting...');
     setTimeout(() => {
-      window.location.href = 'blog-admin.html';
+      window.location.href = 'blog-admin';
     }, 400);
 
   } else {
@@ -439,7 +474,7 @@ function handleAdminLogin(e) {
 document.addEventListener('DOMContentLoaded', function() {
   const isSessionActive = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
   if (isSessionActive) {
-    window.location.href = 'blog-admin.html';
+    window.location.href = 'blog-admin';
   }
 });
 </script>

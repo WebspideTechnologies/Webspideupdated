@@ -1,6 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* Universal Clean URL handler: removes .html and index.html from address bar without reloading */
+(function(){
+  if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+    var p = window.location.pathname;
+    var s = window.location.search || '';
+    var h = window.location.hash || '';
+    if (p.endsWith('/index.html') || p.endsWith('/index')) {
+      var c = p.replace(/\/index(\.html)?$/, '/');
+      window.history.replaceState(null, '', c + s + h);
+    } else if (p.endsWith('/blog.html')) {
+      var c = p.replace(/\/blog\.html$/, '/blog/');
+      window.history.replaceState(null, '', c + s + h);
+    } else if (p.endsWith('.html')) {
+      var c = p.replace(/\.html$/, '');
+      window.history.replaceState(null, '', c + s + h);
+    }
+  }
+  if (typeof window !== 'undefined' && window.location && window.location.protocol === 'file:') {
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest && e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.includes('.html')) return;
+      if (href === '' || href === '/' || href === './') {
+        a.setAttribute('href', 'index.html');
+      } else if (href === 'blog' || href === 'blog/' || href === './blog/' || href === './blog') {
+        a.setAttribute('href', 'blog.html');
+      } else if (!href.includes('.')) {
+        a.setAttribute('href', href.replace(/\/$/, '') + '.html');
+      }
+    }, true);
+  }
+})();
+</script>
 <meta charset="UTF-8" />
 <title>Dashboard ‹ Webspide — WordPress Model Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1298,7 +1333,7 @@ body {
 <!-- 1. WORDPRESS ADMIN TOP BAR -->
 <div id="wpadminbar">
   <div class="wp-bar-left">
-    <a href="index.html" class="wp-bar-item wp-brand-logo" title="Visit Webspide Home">
+    <a href="./" class="wp-bar-item wp-brand-logo" title="Visit Webspide Home">
       <img src="w-logo.png" alt="W" onerror="this.style.display='none'" />
       <span>EBSPIDE</span>
     </a>
@@ -1388,7 +1423,7 @@ body {
       </li>
 
       <li class="wp-menu-item">
-        <a href="blog.html" target="_blank">
+        <a href="blog/" target="_blank">
           <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           <span>Live Site ↗</span>
         </a>
@@ -2311,7 +2346,7 @@ const SESSION_KEY = 'webspide_admin_session';
 (function checkAdminAuth() {
   const sessionToken = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
   if (!sessionToken) {
-    window.location.replace('blog-login.html');
+    window.location.replace('blog-login');
   }
 })();
 
@@ -3072,7 +3107,7 @@ ${coverImage ? `<tr><td style="padding:0;"><img src="${coverImage}" alt="${escap
 <p style="color:#64748b;font-size:13px;">By <strong>${escapeHtml(post.author || 'Webspide Team')}</strong> · ${post.readTime || '5 min read'}</p>
 </td></tr>
 <tr><td style="background:#f8faff;padding:20px 40px;text-align:center;border-top:1px solid #e2e8f0;">
-<p style="color:#64748b;font-size:12px;margin:0;">© 2026 Webspide Technologies · <a href="https://azhar2006-collab.github.io/Webspideupdated/blog.html" style="color:#1F4FB2;">Unsubscribe</a></p>
+<p style="color:#64748b;font-size:12px;margin:0;">© 2026 Webspide Technologies · <a href="https://azhar2006-collab.github.io/Webspideupdated/blog/" style="color:#1F4FB2;">Unsubscribe</a></p>
 </td></tr>
 </table></td></tr></table></body></html>`;
 
@@ -3690,9 +3725,9 @@ const PHYSICAL_BLOG_SLUGS = [
 ];
 
 function getBlogDetailUrl(blog) {
-  if (!blog) return 'blog.html';
+  if (!blog) return 'blog/';
   const slug = blog.slug || generateSlug(blog.title);
-  if (PHYSICAL_BLOG_SLUGS.includes(slug)) {
+  if (window.location.protocol !== 'file:' || PHYSICAL_BLOG_SLUGS.includes(slug)) {
     return `blog/${encodeURIComponent(slug)}/`;
   }
   return `blog-detail.html?title=${encodeURIComponent(slug)}&id=${encodeURIComponent(blog.id || '')}`;
@@ -4930,7 +4965,7 @@ function handleAdminLogout() {
     localStorage.removeItem(SESSION_KEY);
     showToast('Logging out...');
     setTimeout(() => {
-      window.location.replace('blog-login.html');
+      window.location.replace('blog-login');
     }, 400);
   }
 }

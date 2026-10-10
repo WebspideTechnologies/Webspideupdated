@@ -1,6 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* Universal Clean URL handler: removes .html and index.html from address bar without reloading */
+(function(){
+  if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+    var p = window.location.pathname;
+    var s = window.location.search || '';
+    var h = window.location.hash || '';
+    if (p.endsWith('/index.html') || p.endsWith('/index')) {
+      var c = p.replace(/\/index(\.html)?$/, '/');
+      window.history.replaceState(null, '', c + s + h);
+    } else if (p.endsWith('/blog.html')) {
+      var c = p.replace(/\/blog\.html$/, '/blog/');
+      window.history.replaceState(null, '', c + s + h);
+    } else if (p.endsWith('.html')) {
+      var c = p.replace(/\.html$/, '');
+      window.history.replaceState(null, '', c + s + h);
+    }
+  }
+  if (typeof window !== 'undefined' && window.location && window.location.protocol === 'file:') {
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest && e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.includes('.html')) return;
+      if (href === '' || href === '/' || href === './') {
+        a.setAttribute('href', 'index.html');
+      } else if (href === 'blog' || href === 'blog/' || href === './blog/' || href === './blog') {
+        a.setAttribute('href', 'blog.html');
+      } else if (!href.includes('.')) {
+        a.setAttribute('href', href.replace(/\/$/, '') + '.html');
+      }
+    }, true);
+  }
+})();
+</script>
   <meta charset="UTF-8">
   <title>Page Not Found | Webspide Technologies</title>
   <script>
@@ -16,7 +51,7 @@
       }
     })();
   </script>
-  <meta http-equiv="refresh" content="4; url=blog.html">
+  <meta http-equiv="refresh" content="4; url=blog/">
   <style>
     body {
       font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -63,7 +98,7 @@
   <div class="box">
     <h1>404</h1>
     <p>The requested page could not be found or may have moved. Redirecting you to the blog section...</p>
-    <a href="blog.html" class="btn">← Return to Blog</a>
+    <a href="blog/" class="btn">← Return to Blog</a>
   </div>
 </body>
 </html>
