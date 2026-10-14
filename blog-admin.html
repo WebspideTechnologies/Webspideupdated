@@ -1003,10 +1003,14 @@ body {
   background: #eef2ff;
 }
 .featured-img-preview-box img {
-  width: 100%;
-  max-height: 180px;
-  object-fit: cover;
-  border-radius: 3px;
+  max-width: 100%;
+  max-height: 210px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+  margin: 0 auto;
 }
 .featured-img-preview-box span.ph-text {
   color: var(--wp-text-muted);
@@ -3790,7 +3794,7 @@ function processImageFile(file) {
     // Auto-compress and scale using Canvas to keep size optimal for storage
     const img = new Image();
     img.onload = function() {
-      const maxDim = 1200;
+      const maxDim = 1600;
       let w = img.width;
       let h = img.height;
 
@@ -3810,7 +3814,8 @@ function processImageFile(file) {
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, w, h);
 
-      const optimizedUrl = canvas.toDataURL('image/jpeg', 0.86);
+      const isPng = file.type === 'image/png';
+      const optimizedUrl = isPng ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.88);
       
       document.getElementById('postImage').value = optimizedUrl;
       updateEditorImagePreview(optimizedUrl);

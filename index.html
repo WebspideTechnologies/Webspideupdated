@@ -2073,9 +2073,29 @@ h5 { font-weight: 800 !important; color: #8B5CF6 !important; }
   transition: all 0.3s ease; display: flex; flex-direction: column;
 }
 .insight-card:hover { transform: translateY(-8px); box-shadow: 0 20px 48px rgba(139, 92, 246, 0.16); border-color: rgba(139, 92, 246, 0.35); }
-.insight-thumbnail { height: 200px; background: var(--ws-main-gradient); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-.insight-thumbnail img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
-.insight-card:hover .insight-thumbnail img { transform: scale(1.06); }
+.insight-thumbnail {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #172a6b 0%, #07164F 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.insight-thumbnail img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  transition: transform 0.4s ease;
+  display: block;
+}
+.insight-card:hover .insight-thumbnail img {
+  transform: scale(1.04);
+}
 .insight-thumbnail svg { width: 52px; height: 52px; stroke: rgba(255, 255, 255, 0.7); fill: none; stroke-width: 1.5; }
 .insight-content { padding: 28px 24px; display: flex; flex-direction: column; flex: 1; }
 .insight-category {
